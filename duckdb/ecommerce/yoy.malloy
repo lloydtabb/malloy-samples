@@ -1,0 +1,13 @@
+import "ecommerce.malloy"
+
+query: order_items->{
+  declare: 
+    current_sales is total_sales  { where: created_at ? @2022 for 1 year } 
+    last_year_sales is total_sales { where: created_at ? @2021 for 1 year }
+
+  group_by:inventory_items.product_category
+  aggregate:
+    current_sales
+    last_year_sales
+    growth is (current_sales - last_year_sales)/last_year_sales * 100
+}
